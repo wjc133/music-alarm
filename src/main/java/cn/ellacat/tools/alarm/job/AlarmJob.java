@@ -16,9 +16,9 @@ import java.util.List;
 /**
  * @author wjc133
  */
-@Lazy(false)
-@EnableScheduling
-@Service
+//@Lazy(false)
+//@EnableScheduling
+//@Service
 public class AlarmJob {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlarmJob.class);
 
@@ -27,7 +27,7 @@ public class AlarmJob {
     @Autowired
     private NeteaseClient client;
 
-    @Scheduled(cron = "0 30 2 * * ?")
+//    @Scheduled(cron = "0 30 2 * * ?")
     public void ready() {
         LOGGER.info("ready for song");
         client.getPlaylist(ID_PLAYLIST, new NeteaseClient.Callback<Playlist>() {

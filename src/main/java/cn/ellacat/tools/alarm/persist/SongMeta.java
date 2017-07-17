@@ -4,6 +4,8 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Date;
+
 /**
  * 歌曲元数据，用于持久化
  *
@@ -11,10 +13,11 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "music")
 public class SongMeta {
-    @DatabaseField(id = true, generatedId = true)
+    @DatabaseField(generatedId = true)
     private long id;
     @DatabaseField(dataType = DataType.STRING, width = 48, canBeNull = false)
     private String name;
+    @DatabaseField
     private long duration;
     @DatabaseField(dataType = DataType.STRING, width = 128)
     private String artists;
@@ -22,9 +25,12 @@ public class SongMeta {
     private String album;
     @DatabaseField(dataType = DataType.STRING, width = 256, canBeNull = false)
     private String url;
+    @DatabaseField
     private long size;
-    @DatabaseField(columnName = "oriId")
-    private String oriId;
+    @DatabaseField(columnName = "ori_id", canBeNull = false)
+    private long oriId;
+    @DatabaseField(columnName = "update_time")
+    private Date updateTime;
 
     public long getId() {
         return id;
@@ -82,11 +88,11 @@ public class SongMeta {
         this.size = size;
     }
 
-    public String getOriId() {
+    public long getOriId() {
         return oriId;
     }
 
-    public void setOriId(String oriId) {
+    public void setOriId(long oriId) {
         this.oriId = oriId;
     }
 
@@ -100,7 +106,7 @@ public class SongMeta {
                 ", album='" + album + '\'' +
                 ", url='" + url + '\'' +
                 ", size=" + size +
-                ", oriId='" + oriId + '\'' +
+                ", oriId=" + oriId +
                 '}';
     }
 }
