@@ -3,6 +3,8 @@ package cn.ellacat.tools.alarm.netease;
 import retrofit2.Call;
 import retrofit2.http.*;
 
+import java.util.Map;
+
 /**
  * @author wjc133
  */
@@ -12,5 +14,5 @@ public interface SongApi {
 
     @POST("/weapi/song/enhance/player/url")
     @FormUrlEncoded
-    Call<MusicResponse> getMusic(@Field("params") String params, @Field("encSecKey") String encSecKey);
+    Call<MusicResponse> getMusic(@Query("csrf_token") String token, @HeaderMap Map<String, String> headers, @Field("params") String params, @Field("encSecKey") String encSecKey);
 }

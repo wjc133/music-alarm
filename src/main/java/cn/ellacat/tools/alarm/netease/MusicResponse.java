@@ -1,11 +1,13 @@
 package cn.ellacat.tools.alarm.netease;
 
+import java.util.List;
+
 /**
  * @author wjc133
  */
 public class MusicResponse {
     private int code;
-    private Music data;
+    private List<Music> data;
 
     public int getCode() {
         return code;
@@ -15,11 +17,11 @@ public class MusicResponse {
         this.code = code;
     }
 
-    public Music getData() {
+    public List<Music> getData() {
         return data;
     }
 
-    public void setData(Music data) {
+    public void setData(List<Music> data) {
         this.data = data;
     }
 

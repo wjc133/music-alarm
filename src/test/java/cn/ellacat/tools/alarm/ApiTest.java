@@ -1,7 +1,9 @@
 package cn.ellacat.tools.alarm;
 
+import cn.ellacat.tools.alarm.netease.MusicResponse;
 import cn.ellacat.tools.alarm.netease.NeteaseClient;
 import cn.ellacat.tools.alarm.netease.Playlist;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -23,15 +25,27 @@ public class ApiTest {
     @Autowired
     private NeteaseClient client;
 
+    @Ignore
     @Test
     public void testGetPlaylist() throws IOException {
-        client.getPlaylist(3236554, data -> LOGGER.info("playlist >>> {}", data));
+        client.getPlaylist(99644416, new NeteaseClient.Callback<Playlist>() {
+            @Override
+            public void onSuccess(Playlist data) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
         System.in.read();
     }
 
+    @Ignore
     @Test
     public void testGetMusic() throws IOException {
-        client.getMusic(20953761, data -> LOGGER.info("music >>> {}", data));
-        System.in.read();
+        MusicResponse music = client.getMusic(3935139);
+        LOGGER.info("MusicResponse >>> {}", music);
     }
 }

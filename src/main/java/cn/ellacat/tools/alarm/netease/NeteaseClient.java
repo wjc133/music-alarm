@@ -1,6 +1,9 @@
 package cn.ellacat.tools.alarm.netease;
 
-import cn.ellacat.tools.alarm.util.AES;
+import cn.ellacat.tools.alarm.encrypt.EncryptGenertor;
+import cn.ellacat.tools.alarm.encrypt.EncryptResult;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.slf4j.Logger;
@@ -9,6 +12,10 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author wjc133
@@ -21,21 +28,22 @@ public class NeteaseClient {
 
     public NeteaseClient(String baseUrl) {
         final Logger logger = LoggerFactory.getLogger(SongApi.class.getPackage().getName());
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug(message);
-                }
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> {
+            if (logger.isDebugEnabled()) {
+                logger.debug(message);
             }
         });
         if (logger.isDebugEnabled() || logger.isTraceEnabled()) {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         }
 
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .client(new OkHttpClient.Builder().addInterceptor(interceptor).build())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(baseUrl)
                 .build();
 
@@ -73,11 +81,13 @@ public class NeteaseClient {
 
     public void getMusic(long id, Callback<Music> callback) {
         try {
-            String str = "{\"ids\":\"[" + id + "]\",\"br\":320000,\"csrf_token\":\"\"}";
-            String params = AES.getParams(str);
-            String encSecKey = AES.getEncSecKey();
+            Map<String, String> headers = getHeaders();
+            EncryptResult encryptResult = EncryptGenertor.getResult(id);
+
+            String params = encryptResult.getEncText();
+            String encSecKey = encryptResult.getEncSecKey();
             LOGGER.info("getMusic invoked.. params={}, encSecKey={}", params, encSecKey);
-            Call<MusicResponse> call = songApi.getMusic(params, encSecKey);
+            Call<MusicResponse> call = songApi.getMusic(CSRF_TOKEN, headers, params, encSecKey);
             call.enqueue(new retrofit2.Callback<MusicResponse>() {
                 @Override
                 public void onResponse(Call<MusicResponse> call, Response<MusicResponse> response) {
@@ -94,7 +104,12 @@ public class NeteaseClient {
                         LOGGER.warn("getMusic failed. code = {}, id={}", body.getCode(), id);
                         return;
                     }
-                    callback.onSuccess(body.getData());
+                    List<Music> data = body.getData();
+                    if (data == null) {
+                        callback.onFailed();
+                        return;
+                    }
+                    callback.onSuccess(data.get(0));
                 }
 
                 @Override
@@ -107,7 +122,38 @@ public class NeteaseClient {
         }
     }
 
+    public MusicResponse getMusic(long id) {
+        try {
+            Map<String, String> headers = getHeaders();
+            EncryptResult encryptResult = EncryptGenertor.getResult(id);
+
+            String params = encryptResult.getEncText();
+            String encSecKey = encryptResult.getEncSecKey();
+            LOGGER.info("getMusic invoked.. params={}, encSecKey={}", params, encSecKey);
+            Call<MusicResponse> call = songApi.getMusic(CSRF_TOKEN, headers, params, encSecKey);
+            Response<MusicResponse> response = call.execute();
+            if (response == null) {
+                return null;
+            }
+            return response.body();
+        } catch (Exception e) {
+            LOGGER.warn("getMusic failed...", e);
+        }
+        return null;
+    }
+
+    private Map<String, String> getHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("User-Agent",
+                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36");
+        headers.put("Referer", "http://music.163.com/");
+        headers.put("Content-Type", "application/x-www-form-urlencoded");
+        return headers;
+    }
+
     public interface Callback<T> {
         void onSuccess(T data);
+
+        void onFailed();
     }
 }
