@@ -39,13 +39,16 @@ public class Alarm extends Thread {
 
     public void startPlay() {
         LOGGER.info("music player starting...");
+        this.playing = true;
         while (true) {
             if (!playing) {
                 break;
             }
             try {
                 currentSong = musicQueue.poll(1, TimeUnit.MINUTES);
-                player.play(currentSong);
+                if (currentSong != null) {
+                    player.play(currentSong);
+                }
             } catch (InterruptedException e) {
                 LOGGER.info("no music to play, retry");
             }
