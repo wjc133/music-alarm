@@ -1,4 +1,4 @@
-package cn.ellacat.tools.alarm.config;
+package cn.ellacat.tools.alarm.config.properties;
 
 /**
  * @author wjc133

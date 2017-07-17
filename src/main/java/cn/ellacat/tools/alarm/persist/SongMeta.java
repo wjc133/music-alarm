@@ -1,18 +1,29 @@
 package cn.ellacat.tools.alarm.persist;
 
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * 歌曲元数据，用于持久化
  *
  * @author wjc133
  */
+@DatabaseTable(tableName = "music")
 public class SongMeta {
+    @DatabaseField(id = true, generatedId = true)
     private long id;
+    @DatabaseField(dataType = DataType.STRING, width = 48, canBeNull = false)
     private String name;
     private long duration;
+    @DatabaseField(dataType = DataType.STRING, width = 128)
     private String artists;
+    @DatabaseField(dataType = DataType.STRING, width = 128)
     private String album;
+    @DatabaseField(dataType = DataType.STRING, width = 256, canBeNull = false)
     private String url;
     private long size;
+    @DatabaseField(columnName = "oriId")
     private String oriId;
 
     public long getId() {

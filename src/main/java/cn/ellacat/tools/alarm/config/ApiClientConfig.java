@@ -1,5 +1,6 @@
 package cn.ellacat.tools.alarm.config;
 
+import cn.ellacat.tools.alarm.config.properties.NeteaseProperties;
 import cn.ellacat.tools.alarm.netease.NeteaseClient;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
