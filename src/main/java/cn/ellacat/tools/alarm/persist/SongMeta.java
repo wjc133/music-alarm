@@ -11,11 +11,11 @@ import java.util.Date;
  *
  * @author wjc133
  */
-@DatabaseTable(tableName = "music")
+@DatabaseTable(tableName = "song")
 public class SongMeta {
     @DatabaseField(generatedId = true)
     private long id;
-    @DatabaseField(dataType = DataType.STRING, width = 48, canBeNull = false)
+    @DatabaseField(dataType = DataType.STRING, width = 128, canBeNull = false)
     private String name;
     @DatabaseField
     private long duration;
@@ -23,14 +23,12 @@ public class SongMeta {
     private String artists;
     @DatabaseField(dataType = DataType.STRING, width = 128)
     private String album;
-    @DatabaseField(dataType = DataType.STRING, width = 256, canBeNull = false)
-    private String url;
-    @DatabaseField
-    private long size;
     @DatabaseField(columnName = "ori_id", canBeNull = false)
     private long oriId;
-    @DatabaseField(columnName = "update_time")
+    @DatabaseField(columnName = "update_time", dataType = DataType.DATE_LONG)
     private Date updateTime;
+    @DatabaseField(columnName = "playlist_id")
+    private int playlistId;
 
     public long getId() {
         return id;
@@ -72,28 +70,28 @@ public class SongMeta {
         this.album = album;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
-
     public long getOriId() {
         return oriId;
     }
 
     public void setOriId(long oriId) {
         this.oriId = oriId;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public int getPlaylistId() {
+        return playlistId;
+    }
+
+    public void setPlaylistId(int playlistId) {
+        this.playlistId = playlistId;
     }
 
     @Override
@@ -104,9 +102,9 @@ public class SongMeta {
                 ", duration=" + duration +
                 ", artists='" + artists + '\'' +
                 ", album='" + album + '\'' +
-                ", url='" + url + '\'' +
-                ", size=" + size +
                 ", oriId=" + oriId +
+                ", updateTime=" + updateTime +
+                ", playlistId=" + playlistId +
                 '}';
     }
 }
