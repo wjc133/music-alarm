@@ -14,6 +14,13 @@
         <version>1.5.3.RELEASE</version>
     </parent>
 
+    <scm>
+        <url>https://github.com/wjc133/music-alarm</url>
+        <connection>scm:git:https://github.com/wjc133/music-alarm.git</connection>
+        <developerConnection>scm:git:https://github.com/wjc133/music-alarm.git</developerConnection>
+    </scm>
+
+
     <properties>
         <java.version>1.8</java.version>
 
@@ -131,7 +138,6 @@
 
     <build>
         <finalName>MusicAlarm</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -143,6 +149,26 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <!--配置参考了http://stackoverflow.com/questions/3445075/maven-releaseperform-without-deploy-and-calling-an-external-shell-script-->
+                    <goals>install</goals>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                    <checkModificationExcludeList>.idea,.iml,.project,.classpath</checkModificationExcludeList>
                 </configuration>
             </plugin>
         </plugins>
