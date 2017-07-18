@@ -14,12 +14,28 @@
         <version>1.5.3.RELEASE</version>
     </parent>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <scm>
-        <url>https://github.com/wjc133/music-alarm</url>
+        <tag>master</tag>
+        <url>git:https://github.com/wjc133/music-alarm.git</url>
         <connection>scm:git:https://github.com/wjc133/music-alarm.git</connection>
         <developerConnection>scm:git:https://github.com/wjc133/music-alarm.git</developerConnection>
     </scm>
 
+    <developers>
+        <developer>
+            <name>wjc133</name>
+            <email>cmsdwjc133@gmail.com</email>
+            <organization>Elite Group</organization>
+        </developer>
+    </developers>
 
     <properties>
         <java.version>1.8</java.version>
@@ -159,6 +175,23 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
