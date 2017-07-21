@@ -13,6 +13,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,6 +139,60 @@ public class NeteaseClient {
             return response.body();
         } catch (Exception e) {
             LOGGER.warn("getMusic failed...", e);
+        }
+        return null;
+    }
+
+    public void searchMusic(String keyword, SearchType type, Callback<SearchResult> callback) {
+        LOGGER.info("searchMusic invoked... keyword={}, searchType={}", keyword, type.getCode());
+        Call<SearchResponse> call = songApi.searchMusic(keyword, type.getCode(), 20, 0);
+        call.enqueue(new retrofit2.Callback<SearchResponse>() {
+            @Override
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                if (!response.isSuccessful()) {
+                    LOGGER.warn("getPlaylist failed. keyword={}, searchType={}, status code={}", keyword, type.getCode(), response.code());
+                    return;
+                }
+                SearchResponse body = response.body();
+                if (body == null) {
+                    LOGGER.warn("getPlaylist failed. body is null. keyword={}, searchType={}", keyword, type.getCode());
+                    return;
+                }
+                if (!body.isSuccess()) {
+                    LOGGER.warn("getPlaylist failed. code = {}, keyword={}, searchType={}", body.getCode(), keyword, type.getCode());
+                    return;
+                }
+                callback.onSuccess(body.getResult());
+            }
+
+            @Override
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
+                LOGGER.warn("getPlaylist failed. keyword={}, searchType={}", keyword, type.getCode(), t);
+            }
+        });
+    }
+
+    public SearchResult searchMusic(String keyword, SearchType type) {
+        LOGGER.info("searchMusic invoked... keyword={}, searchType={}", keyword, type.getCode());
+        Call<SearchResponse> call = songApi.searchMusic(keyword, type.getCode(), 20, 0);
+        try {
+            Response<SearchResponse> response = call.execute();
+            if (!response.isSuccessful()) {
+                LOGGER.warn("getPlaylist failed. keyword={}, searchType={}, status code={}", keyword, type.getCode(), response.code());
+                return null;
+            }
+            SearchResponse body = response.body();
+            if (body == null) {
+                LOGGER.warn("getPlaylist failed. body is null. keyword={}, searchType={}", keyword, type.getCode());
+                return null;
+            }
+            if (!body.isSuccess()) {
+                LOGGER.warn("getPlaylist failed. code = {}, keyword={}, searchType={}", body.getCode(), keyword, type.getCode());
+                return null;
+            }
+            return body.getResult();
+        } catch (IOException e) {
+            LOGGER.warn("getPlaylist failed. keyword={}, searchType={}", keyword, type.getCode(), e);
         }
         return null;
     }

@@ -15,4 +15,8 @@ public interface SongApi {
     @POST("/weapi/song/enhance/player/url")
     @FormUrlEncoded
     Call<MusicResponse> getMusic(@Query("csrf_token") String token, @HeaderMap Map<String, String> headers, @Field("params") String params, @Field("encSecKey") String encSecKey);
+
+    @POST("/api/search/get")
+    @FormUrlEncoded
+    Call<SearchResponse> searchMusic(@Field("s") String keyword, @Field("type") Short type, @Field("limit") int limit, @Field("offset") int offset);
 }
