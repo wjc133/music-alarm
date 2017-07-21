@@ -4,7 +4,15 @@
 
     <groupId>cn.ellacat.tools</groupId>
     <artifactId>music-alarm</artifactId>
+    <packaging>pom</packaging>
     <version>1.0.1-SNAPSHOT</version>
+
+    <modules>
+        <module>music-alarm-netease</module>
+        <module>music-alarm-server</module>
+        <module>music-alarm-common</module>
+        <module>music-alarm-persist</module>
+    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -50,6 +58,7 @@
         <commons.text.version>1.1</commons.text.version>
         <!--数据库-->
         <ormlite.version>5.0</ormlite.version>
+        <sqlite.jdbc.version>3.19.3</sqlite.jdbc.version>
     </properties>
 
     <repositories>
@@ -70,11 +79,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -110,11 +114,6 @@
             <artifactId>commons-text</artifactId>
             <version>${commons.text.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>com.j256.ormlite</groupId>
@@ -131,44 +130,13 @@
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.19.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-        </dependency>
-        <!-- Provided -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${sqlite.jdbc.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <finalName>MusicAlarm</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
