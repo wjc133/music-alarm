@@ -19,7 +19,7 @@ public class Mplayer implements Player {
             return;
         }
         try {
-            CommandLine cmd = new CommandLine("mplayer");
+            CommandLine cmd = new CommandLine("mplayer -ao oss");
             cmd.addArgument(url);
             DefaultExecutor executor = new DefaultExecutor();
             executor.setExitValues(new int[]{0, 1});
