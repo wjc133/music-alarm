@@ -12,6 +12,7 @@
         <module>music-alarm-server</module>
         <module>music-alarm-common</module>
         <module>music-alarm-persist</module>
+        <module>music-alarm-speaker</module>
     </modules>
 
     <parent>
@@ -59,6 +60,9 @@
         <!--数据库-->
         <ormlite.version>5.0</ormlite.version>
         <sqlite.jdbc.version>3.19.3</sqlite.jdbc.version>
+
+        <!--Guava-->
+        <guava.version>22.0</guava.version>
     </properties>
 
     <repositories>
@@ -76,6 +80,12 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

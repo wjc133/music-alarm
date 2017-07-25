@@ -1,8 +1,10 @@
-package cn.ellacat.tools.alarm;
+package cn.ellacat.tools.alarm.server;
 
 import cn.ellacat.tools.alarm.netease.MusicResponse;
 import cn.ellacat.tools.alarm.netease.NeteaseClient;
 import cn.ellacat.tools.alarm.netease.Playlist;
+import cn.ellacat.tools.alarm.speaker.baidu.AccessTokenClient;
+import cn.ellacat.tools.alarm.speaker.baidu.AccessTokenResponse;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,8 @@ public class ApiTest {
 
     @Autowired
     private NeteaseClient client;
+    @Autowired
+    private AccessTokenClient tokenClient;
 
     @Ignore
     @Test
@@ -47,5 +51,13 @@ public class ApiTest {
     public void testGetMusic() throws IOException {
         MusicResponse music = client.getMusic(3935139);
         LOGGER.info("MusicResponse >>> {}", music);
+    }
+
+    @Ignore
+    @Test
+    public void testGetToken() {
+        AccessTokenResponse token = tokenClient.getAccessToken();
+        String accessToken = token.getAccessToken();
+        LOGGER.info("AccessToken >>> {}", accessToken);
     }
 }
